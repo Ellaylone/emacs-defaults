@@ -44,7 +44,7 @@
 
 ;;; define list of packages for installtion ;;;
 (defvar my-packages
-  '(auto-complete autopair flycheck ipython magit jedi emacs-nav))
+  '(auto-complete autopair flycheck ipython magit jedi nav))
 ;;; define list of packages for installtion ;;;
 
 ;;; define function checking installed packages ;;;
