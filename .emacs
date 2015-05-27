@@ -44,7 +44,7 @@
 
 ;;; define list of packages for installtion ;;;
 (defvar my-packages
-  '(auto-complete autopair flycheck ipython magit jedi nav))
+  '(auto-complete autopair flycheck ipython magit jedi nav web-mode))
 ;;; define list of packages for installtion ;;;
 
 ;;; define function checking installed packages ;;;
@@ -80,3 +80,7 @@
 ;;; global autopair mode ;;;
 (require 'autopair)
 (autopair-global-mode)
+
+;;; global web-mode for specific extensions ;;;
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
