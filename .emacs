@@ -25,6 +25,7 @@
 
   (show-paren-mode 1)
   (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
   (setq x-select-enable-cliboard t
 	x-select-enable-primary t
 	save-interprogram-paste-before-kill t
@@ -44,7 +45,42 @@
 
 ;;; define list of packages for installtion ;;;
 (defvar my-packages
-  '(auto-complete autopair flycheck ipython magit jedi nav web-mode python-django django-snippets django-mode yasnippet))
+  '(
+    auto-complete
+    autopair
+    flycheck
+    magit
+    nav
+    web-mode
+    yasnippet
+
+    ;;;python stuff
+    jedi
+    ipython
+    python-django
+    django-snippets
+    django-mode
+
+    ;;;c++ stuff
+    anzu
+    company
+    duplicate-thing
+    ggtags
+    helm
+    helm-gtags
+    helm-projectile
+    helm-swoop
+    clean-aindent-mode
+    comment-dwin-2
+    dtrt-indent
+    ws-butler
+    iedit
+    smartparens
+    projectile
+    volatile-highlights
+    undo-tree
+    zygospore
+    ))
 ;;; define list of packages for installtion ;;;
 
 ;;; define function checking installed packages ;;;
@@ -94,3 +130,103 @@
 ;;; global yasnippet ;;;
 (require 'yasnippet)
 (yas-global-mode 1)
+
+;;; set prefix before helm-gtags ;;;
+(setq helm-gtags-prefix-key "\C-cg")
+
+(add-to-list 'load-path "~/.emacs.d/custom")
+
+(require 'setup-helm)
+(require 'setup-helm-gtags)
+(require 'setup-cedet)
+(require 'setup-editing)
+
+(windmove-default-keybindings)
+
+;;; company ;;;
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+(delete 'company-semantic company-backends)
+(define-key c-mode-map  [(tab)] 'company-complete)
+(define-key c++-mode-map  [(tab)] 'company-complete)
+
+;;; company-c-headers ;;;
+(add-to-list 'company-backends 'company-c-headers)
+
+;;; hs-minor-mode for folding source code ;;;
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+;;; set default c style ;;;
+;; Available C style:
+;; “gnu”: The default style for GNU projects
+;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
+;; “bsd”: What BSD developers use, aka “Allman style” after Eric Allman.
+;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+;; “ellemtel”: Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,” Erik Nyquist and Mats Henricson, Ellemtel
+;; “linux”: What the Linux developers use for kernel development
+;; “python”: What Python developers use for extension modules
+;; “java”: The default style for java-mode (see below)
+;; “user”: When you want to define your own style
+(setq
+ c-default-style "linux" ;; set style to "linux"
+ )
+
+;;; autoindent on ret ;;;
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;;; keybind for whitecpace-mode ;;;
+(global-set-key (kbd "C-c w") 'whitespace-mode)
+
+;;; show trailing whitespaces ;;;
+(add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+
+;;; compilation ;;;
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+
+;;; setup GDB ;;;
+;;; (setq
+ ;; use gdb-many-windows by default
+;;; gdb-many-windows t
+
+ ;; Non-nil means display source file containing the main routine at startup
+;;; gdb-show-main t
+;;; )
+
+;;; Package: clean-aindent-mode ;;;
+(require 'clean-aindent-mode)
+(add-hook 'prog-mode-hook 'clean-aindent-mode)
+
+;;; Package: dtrt-indent ;;;
+(require 'dtrt-indent)
+(dtrt-indent-mode 1)
+
+;;; Package: ws-butler ;;;
+(require 'ws-butler)
+(add-hook 'prog-mode-hook 'ws-butler-mode)
+
+;;; Package: smartparens ;;;
+(require 'smartparens-config)
+(setq sp-base-key-bindings 'paredit)
+(setq sp-autoskip-closing-pair 'always)
+(setq sp-hybrid-kill-entire-symbol nil)
+(sp-use-paredit-bindings)
+
+(show-smartparens-global-mode +1)
+(smartparens-global-mode 1)
+
+;;; Package: projejctile ;;;
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+
+(require 'helm-projectile)
+(helm-projectile-on)
+(setq projectile-completion-system 'helm)
+(setq projectile-indexing-method 'alien)
+
+;;; Package zygospore ;;;
+;;;(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
