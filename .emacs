@@ -71,7 +71,7 @@
     helm-projectile
     helm-swoop
     clean-aindent-mode
-    comment-dwin-2
+    comment-dwim-2
     dtrt-indent
     ws-butler
     iedit
